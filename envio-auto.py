@@ -6,7 +6,6 @@ import threading
 import shutil
 import time
 
-# Declare sftp como uma variável global para que possa ser acessada em várias funções.
 sftp = None
 
 def atualizar_progresso(nome_arquivo, transferido, total):
@@ -35,10 +34,9 @@ def criar_diretorio(diretorio_remoto):
         rotulo_status.config(text="O diretório remoto não pode estar em branco.")
         return
 
-    global sftp  # Use a variável global sftp
+    global sftp  
 
     try:
-        # Verifique se a conexão SFTP está estabelecida
         if sftp is not None:
             sftp.mkdir(diretorio_remoto)
             rotulo_status.config(text="Diretório remoto criado com sucesso: " + diretorio_remoto)
@@ -48,13 +46,13 @@ def criar_diretorio(diretorio_remoto):
         rotulo_status.config(text="Erro ao criar diretório remoto: " + str(e))
 
 def conectar_sftp():
-    global sftp  # Use a variável global sftp
+    global sftp  
 
     try:
-        host = "212.102.60.69"
+        host = "endereco_do_host"
         porta = 22
-        usuario = "root"
-        senha = "alexandre2022"
+        usuario = "seu_usuario"
+        senha = "sua_senha"
 
         transporte = paramiko.Transport((host, porta))
         transporte.connect(username=usuario, password=senha)
@@ -71,13 +69,13 @@ def atualizar_mensagem(texto):
     texto_mensagem.see("end")
 
 def transferencia_sftp(diretorio_remoto):
-    global sftp  # Use a variável global sftp
+    global sftp  
 
     try:
-        host = "212.102.60.69"
+        host = "endereco_do_host"
         porta = 22
-        usuario = "root"
-        senha = "alexandre2022"
+        usuario = "seu_usuario"
+        senha = "sua_senha"
 
         transporte = paramiko.Transport((host, porta))
         transporte.connect(username=usuario, password=senha)
@@ -108,7 +106,7 @@ def transferencia_sftp(diretorio_remoto):
 
                         arquivos_enviados.append(nome_arquivo)
 
-                        with open("F:/concluidos/contagem.txt", "w") as arquivo_contagem:
+                        with open("c:/lixeira/contagem.txt", "w") as arquivo_contagem:
                             arquivo_contagem.write("\n".join(arquivos_enviados))
 
                         mensagem_sucesso = "Arquivo '{}' transferido com sucesso.".format(nome_arquivo)
@@ -139,8 +137,8 @@ def iniciar_thread_transferencia():
         rotulo_status.config(text="Transferência já em andamento.")
 
 def limpar_arquivos():
-    diretorio_origem = "F:/concluidos/concluidostrans/"
-    diretorio_destino = "F:/concluidos/lixeira/"
+    diretorio_origem = "C:/envio/"
+    diretorio_destino = "C:/lixeira/"
 
     try:
         for nome_arquivo in os.listdir(diretorio_origem):
@@ -148,7 +146,7 @@ def limpar_arquivos():
             caminho_destino = os.path.join(diretorio_destino, nome_arquivo)
             shutil.move(caminho_origem, caminho_destino)
 
-        rotulo_status.config(text="Arquivos movidos para lixeira/")
+        rotulo_status.config(text="Arquivos movidos para lixeira")
     except Exception as e:
         rotulo_status.config(text="Ocorreu um erro: " + str(e))
 
@@ -190,7 +188,7 @@ texto_mensagem.pack()
 
 arquivos_enviados = ler_arquivos_enviados()
 
-diretorio_origem = "F:/concluidos/concluidostrans/"
+diretorio_origem = "C:/envio/"
 
 flag_parar_transferencia = False
 
